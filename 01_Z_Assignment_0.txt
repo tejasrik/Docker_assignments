@@ -1,0 +1,57 @@
+1. I didn't install docker in my machine but i have used the alternate platform.
+checked docker -v 
+Docker version 19.03.6, build 369ce74a3c
+
+2. Find a image from dockerhub of your choice(recommeded: nginx), don't use browser, pull the official image from dockerhub
+docker pull nginx
+
+3. List all the available images in your machine/vm, make sure you see recently pulled image in the list.
+docker image ls
+
+4. Find out the "Full" ImageId of the image that you pulled and write it below.
+4392e5dad77d
+
+5.
+docker container run -d --name cont1 nginx 
+f21f17e94c13de6be0ea89fa06b3c8cd3dd4e0e57873df4a3a8b8a47239cd807
+
+6.
+docker container ls
+
+7
+docker container ls -a
+
+8
+f21f17e94c13de6be0ea89fa06b3c8cd3dd4e0e57873df4a3a8b8a47239cd807
+
+9
+docker history nginx
+5 
+
+10
+docker pull tomcat:7
+
+11
+docker run -d --name tomcatrun -p 8080:8080 tomcat:7
+
+12 
+docker inspect <container_name>
+docker inspect d9c9ef23e19e5c76d990f84a24c588f39af433a60e25e2bbe3759d37393a646f
+172.18.0.3
+
+13
+docker port d9c9ef23e19e5c76d990f84a24c588f39af433a60e25e2bbe3759d37393a646f
+8080/tcp -> 0.0.0.0:8080
+
+14
+localhost:8080
+
+15
+docker images tomcat:7
+529mb
+
+16
+"JAVA_URL_VERSION=8u252b09",
+"CATALINA_HOME=/usr/local/tomcat",
+
+17
