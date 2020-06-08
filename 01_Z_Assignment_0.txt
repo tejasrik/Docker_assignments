@@ -55,3 +55,62 @@ docker images tomcat:7
 "CATALINA_HOME=/usr/local/tomcat",
 
 17
+0.0.0.0:8081->8080->tcp
+
+18
+docker run -d --name tomcatrun1 -p 8080:8080 tomcat:7
+docker run -d --name tomcatrun -p 8081:8080 tomcat:7
+
+19
+docker pull ubuntu:bionic
+docker pull ubuntu:eoan
+
+20
+docker attach containerID
+
+22
+docker container ls -a
+
+23
+running
+95f2445ac71b
+to start docker start
+
+24
+docker logs -f <containerid>
+docker logs -f 95f2445ac71b
+
+25
+not running
+
+26
+docker exec -t <containerid> bash
+
+27. Create a file with any name in root directory
+touch file.txt
+
+28. Install software of your choice in ubuntu container using "apt-get install"
+apt-get install <software_name>
+
+29
+exit
+
+30
+no
+
+31
+31. Create a new ubuntu container out of the same image as that previous container in attached mode.
+docker run -it ubuntu:rolling sh
+ctrl+PQ to exit
+
+32. Login as a root user
+docker exec -t <containerid> bash
+
+33
+ls
+
+34
+
+
+
+
