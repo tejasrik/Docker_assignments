@@ -1,0 +1,19 @@
+Your company is ready to move forward with using Docker to run their applications. However, they have some complex container apps that can take advantage of the cluster management and orchestration features of Docker swarm. You have been asked to stand up a simple Docker swarm cluster to be used for some initial testing. A set of servers has already been provisioned for this purpose. The swarm cluster should meet the following criteria:
+
+One Swarm manager.
+Two worker nodes.
+All nodes should use Docker CE version 5:18.09.5~3-0~ubuntu-bionic.
+Both worker nodes should be joined to the cluster.
+Any non-root user should be able to run docker commands on all three servers.
+
+[NOTE: Write the series of commands to achieve above in this file below the question scenario with documentation]
+
+Good luck!
+**********************************************************************************************************************************
+
+ubuntu@ip-172-31-52-112:~$ sudo docker swarm init --advertise-addr 52.86.137.254
+Swarm initialized: current node (7wnledb31zfr7rzrpby3vtvlk) is now a manager.
+
+To add a worker to this swarm, run the following command:
+
+    docker swarm join --token SWMTKN-1-4ymrmvnmzctc383whxeat4cmv9h4f1o47jbtd0zcsi5cit1d98-5e690dpgilqtmugq7jjce4prl 52.86.137.254:2377
