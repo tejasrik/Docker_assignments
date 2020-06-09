@@ -1,0 +1,108 @@
+
+ubuntu@ip-172-31-52-112:~$ sudo docker swarm leave --force
+Node left the swarm.
+ubuntu@ip-172-31-52-112:~$ sudo docker swarm init
+Swarm initialized: current node (3myye8pb4giveex89gtb9fi2f) is now a manager.
+
+To add a worker to this swarm, run the following command:
+
+    docker swarm join --token SWMTKN-1-38b6ae5juw9tct9s63f19kgyubv808p6mrh9j2u190k7ub7s0u-91ewx6c75db2ebzb74xglnc5x 172.31.52.112:2377
+
+To add a manager to this swarm, run 'docker swarm join-token manager' and follow the instructions.
+
+ubuntu@ip-172-31-52-112:~$ sudo docker node ls
+ID                            HOSTNAME            STATUS              AVAILABILITY        MANAGER STATUS      ENGINE VERSION
+3myye8pb4giveex89gtb9fi2f *   ip-172-31-52-112    Ready               Active              Leader              19.03.6
+
+
+vim stack.yml
+version: "3"
+services:
+ fruit:
+  image: linuxacademycontent/fruit-service:1.0.1
+  ports:
+   - "8081:80"
+  
+ vegetables:
+  image: linuxacademycontent/vegetable-service:1.0.0
+  ports:
+   - "8082:80"
+ 
+ allProducts:
+  image: linuxacademycontent/all-products:1.0.0
+  environment:
+   - FRUIT_HOST=fruit
+     FRUIT_PORT=8081
+     VEGETABLE_HOST=vegetables
+     VEGETABLE_PORT=8082
+  ports:
+   - "8080:80"
+   
+   
+ubuntu@ip-172-31-52-112:~$ sudo docker stack deploy -c stack.yml stack
+Creating network stack_default
+Creating service stack_allProducts
+Creating service stack_fruit
+Creating service stack_vegetables
+ubuntu@ip-172-31-52-112:~$ vim stack.yml
+ubuntu@ip-172-31-52-112:~$ ls
+Dckerfile   Dockerfile.                            stack.yml
+Dockerfile  full-docker-training-16-Z-Assignment1
+ubuntu@ip-172-31-52-112:~$ docker service ls
+Got permission denied while trying to connect to the Docker daemon socket at unix:///var/run/docker.sock: Get http://%2Fvar%2Frun%2Fdocker.sock/v1.40/services: dial unix /var/run/docker.sock: connect: permission denied
+ubuntu@ip-172-31-52-112:~$ sudo docker service ls
+ID                  NAME                MODE                REPLICAS            IMAGE                                         PORTS
+dxdjswpe4m5o        stack_allProducts   replicated          1/1                 linuxacademycontent/all-products:1.0.0        *:8080->80/tcp
+0zrty0solkmh        stack_fruit         replicated          1/1                 linuxacademycontent/fruit-service:1.0.1       *:8081->80/tcp
+v3cikos4es6o        stack_vegetables    replicated          1/1                 linuxacademycontent/vegetable-service:1.0.0   *:8082->80/tcp
+ubuntu@ip-172-31-52-112:~$
+
+$ vim stack.yml
+version: "3"
+services:
+ fruit:
+  image: linuxacademycontent/fruit-service:1.0.1
+  ports:
+   - "8081:80"
+  deploy:
+   replicas: 3    
+ vegetables:
+  image: linuxacademycontent/vegetable-service:1.0.0
+  ports:
+   - "8082:80"
+  deploy:
+   replicas: 3   
+  
+  
+ allProducts:
+  image: linuxacademycontent/all-products:1.0.0
+  environment:
+   - FRUIT_HOST=fruit
+     FRUIT_PORT=8081
+     VEGETABLE_HOST=vegetables
+     VEGETABLE_PORT=8082
+  ports:
+   - "8080:80"
+  deploy:
+   replicas: 3
+
+
+$ docker stack deploy -c stack.yml stack
+
+$ docker service ls
+ID                  NAME                MODE                REPLICAS            IMAGE                          PORTS
+dxdjswpe4m5o         stack_allProducts   replicated          2/3                 linuxacademycontent/all-products:1.0.0        *:8080->80/tcp
+0zrty0solkmh         stack_fruit         replicated          3/3                 linuxacademycontent/fruit-service:1.0.1       *:8081->80/tcp
+v3cikos4es6o         stack_vegetables    replicated          2/3                 linuxacademycontent/vegetable-service:1.0.0   *:8082->80/tcp 
+ allProducts:
+  image: linuxacademycontent/all-products:1.0.0
+  environment:
+   - FRUIT_HOST=fruit
+     FRUIT_PORT=8081
+     VEGETABLE_HOST=vegetables
+     VEGETABLE_PORT=8082
+  ports:
+   - "8080:80"
+
+
+
