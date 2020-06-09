@@ -17,3 +17,7 @@ Swarm initialized: current node (7wnledb31zfr7rzrpby3vtvlk) is now a manager.
 To add a worker to this swarm, run the following command:
 
     docker swarm join --token SWMTKN-1-4ymrmvnmzctc383whxeat4cmv9h4f1o47jbtd0zcsi5cit1d98-5e690dpgilqtmugq7jjce4prl 52.86.137.254:2377
+ ubuntu@ip-172-31-52-112:~$sudo docker node ls
+ID                            HOSTNAME            STATUS              AVAILABILITY        MANAGER STATUS      ENGINE VERSION
+idirt0pusth988mlu319jtcqf *   ip-172-31-52-112    Ready               Active              Leader              19.03.6
+
