@@ -110,6 +110,7 @@ docker exec -t <containerid> bash
 ls
 
 34
+yes
 
 
 
