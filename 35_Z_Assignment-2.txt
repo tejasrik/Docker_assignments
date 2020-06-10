@@ -1,0 +1,124 @@
+
+Your fruit stand company has some software that calculates and serves a list of products and their prices, taking into account items that are on sale and how the sales affect the total price. This software consists of three components: a base-price component which serves the base prices of fruits sold by the fruit stand, a sales component which provides a list of items that are on sale and how much each item is discounted, and a total-price component which communicates with the other two and calculates the final price for each item.
+
+These components have been running on a single Docker host, but as your business is expanding, it is time to upgrade to a swarm cluster for greater flexibility. Run these three application components as services in your swarm cluster, and provide them with a custom overlay network to facilitate isolated communication between them.
+
+Configure these application components on the Swarm cluster so that the following specifications are met:
+
+1. Create an overlay network called prices-overlay-net.
+2. Create a service called base-price with 3 replicas using the linuxacademycontent/prices-base-price:1 image. Configure the service to use the prices-overlay-net network.
+3. Create a service called sales with 3 replicas using the linuxacademycontent/prices-sales:1 image. Configure the service to use the prices-overlay-net network.
+4. Create a service called total-price with 2 replicas using the linuxacademycontent/prices-total-price:1 image. Configure the service to use the prices-overlay-net network. Expose this service's port 80 on port 8080.
+
+If everything is set up correctly, you should be able to access the total prices list with:
+curl localhost:8080.
+
+*******************************************************************************************************
+
+$ docker swarm init
+Swarm initialized: current node (z0l9u8j5yd0tujnviw7c9ajwf) is now a manager.
+
+To add a worker to this swarm, run the following command:
+
+    docker swarm join --token SWMTKN-1-506zz6ifah2mat2t001vfhe4efuuxac96jhsalp4ljugooueum-d8dsl4ti5hmwbkethxuo06kfc 172.17.0.70:2377
+
+To add a manager to this swarm, run 'docker swarm join-token manager' and follow the instructions.
+
+$ docker swarm join --token SWMTKN-1-506zz6ifah2mat2t001vfhe4efuuxac96jhsalp4ljugooueum-d8dsl4ti5hmwbkethxuo06kfc 172.17.0.70:2377
+
+
+
+$ docker network create -d overlay prices-overlay-net
+lkv1schac6uu2ugehr0jd8dhr
+
+$ docker network ls
+NETWORK ID          NAME                 DRIVER              SCOPE
+6b1e20b38097        bridge               bridge              local
+a6deba412f3c        docker_gwbridge      bridge              local
+f46cc1338e5a        host                 host                local
+lct5860ndmqu        ingress              overlay             swarm
+9e826c05fcfd        none                 null                local
+lkv1schac6uu        prices-overlay-net   overlay             swarm
+
+2. Create a service called base-price with 3 replicas using the linuxacademycontent/prices-base-price:1 image. Configure the service to use the prices-overlay-net network.
+
+$ docker service create --name base-price --replicas 3 --network prices-overlay-net linuxacademycontent/prices-base-price:1
+hymnczq53s0423cmy6qrge639
+
+overall progress: 3 out of 3 tasks
+1/3: running
+2/3: running
+3/3: running
+verify: Service converged3. Create a service called sales with 3 replicas using the linuxacademycontent/prices-sales:1 image. Configure the service to use the prices-overlay-net network.
+
+
+3. Create a service called sales with 3 replicas using the linuxacademycontent/prices-sales:1 image. Configure the service to use the prices-overlay-net network.
+
+$ docker service create --name sales --replicas 3 --network prices-overlay-net linuxacademycontent/prices-sales:1
+awbod9j3yihk58dqqpg86l0b5
+
+overall progress: 3 out of 3 tasks
+1/3: running
+2/3: running
+3/3: running
+verify: Service converged
+
+4. Create a service called total-price with 2 replicas using the linuxacademycontent/prices-total-price:1 image. Configure the service to use the prices-overlay-net network. Expose this service's port 80 on port 8080.
+
+$ docker service create --name total-price --replicas 3 -p 8080:80 --network prices-overlay-net linuxacademycontent/prices-total-price:1
+ikwm7y2zto6z2yxornhoafx6w
+overall progress: 3 out of 3 tasks
+1/3: running
+2/3: running
+3/3: running
+verify: Service converged
+$ curl localhost:8080
+{
+    "description": "A list of total prices, including discounts.",
+    "products": [
+        {
+            "name": "apple",
+            "price": "0.98"
+        },
+        {
+            "name": "banana",
+            "price": "1.00"
+        },
+        {
+            "name": "blueberry",
+            "price": "3.99"
+        },
+        {
+            "name": "coconut",
+            "price": "4.99"
+        },
+        {
+            "name": "cranberry",
+            "price": "2.09"
+        },
+        {
+            "name": "cucumber",
+            "price": "0.50"
+        },
+        {
+            "name": "currant",
+            "price": "2.00"
+        },
+        {
+            "name": "olive",
+            "price": "2.50"
+        },
+        {
+            "name": "orange",
+            "price": "1.31"
+        },
+        {
+            "name": "pamelo",
+            "price": "3.00"
+        },
+        {
+            "name": "papaya",
+            "price": "4.75"
+        }
+    ]
+}
